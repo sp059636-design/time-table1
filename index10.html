@@ -1,0 +1,244 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Custom T‑Shirt — Print & Price</title>
+  <style>
+    :root{--accent:#0ea5a4;--muted:#6b7280;--card:#ffffff;--bg:#f8fafc}
+    *{box-sizing:border-box}
+    body{font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;line-height:1.4;margin:0;background:var(--bg);color:#0f172a}
+    .container{max-width:980px;margin:28px auto;padding:20px}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:24px}
+    .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 6px 20px rgba(2,6,23,0.06)}
+    h1{font-size:20px;margin:0 0 6px}
+    .muted{color:var(--muted);font-size:13px}
+    .product-img{width:100%;height:420px;border-radius:10px;background:linear-gradient(180deg,#e6f5f5,#ffffff);display:flex;align-items:center;justify-content:center;position:relative}
+    .shirt{width:240px;height:300px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.06);display:flex;align-items:center;justify-content:center;font-weight:700;color:#111}
+    .controls{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+    label{font-size:13px;color:#111}
+    select,input[type=number]{padding:10px;border-radius:8px;border:1px solid #e6e9ef}
+    .options{display:flex;gap:8px;flex-wrap:wrap}
+    .option{padding:8px 12px;border-radius:8px;border:1px solid #e6e9ef;cursor:pointer}
+    .option.active{border-color:var(--accent);background:rgba(14,165,164,0.08)}
+    .price{font-size:26px;font-weight:700;color:#062022}
+    .price small{font-size:13px;color:var(--muted);font-weight:400}
+    .actions{display:flex;gap:12px;margin-top:14px}
+    button{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .btn-ghost{background:transparent;border:1px solid #e6e9ef;color:#062022}
+    footer{margin-top:20px;font-size:13px;color:var(--muted)}
+    /* print stylesheet */
+    @media print{
+      body{background:#fff}
+      .actions,.controls label,.muted,footer{display:none}
+      .container{box-shadow:none;margin:0;padding:0}
+      .grid{grid-template-columns:1fr}
+      .card{border-radius:0;padding:10px}
+    }
+    /* responsive */
+    @media(max-width:880px){.grid{grid-template-columns:1fr}.product-img{height:300px}.shirt{width:200px;height:240px}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <h1>Custom Printed T‑Shirt</h1>
+        <div class="muted">Design preview — adjusts when you change options</div>
+
+        <div class="product-img" id="previewArea">
+          <div class="shirt" id="shirt">
+            <div id="printText">Your Print Here</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div>
+            <label for="designText">Print text / slogan</label>
+            <input id="designText" placeholder="Type slogan or company name" />
+          </div>
+
+          <div>
+            <label>Print position</label>
+            <div class="options" id="positionOptions">
+              <div class="option active" data-value="front">Front</div>
+              <div class="option" data-value="back">Back</div>
+              <div class="option" data-value="both">Both</div>
+            </div>
+          </div>
+
+          <div>
+            <label for="sizeSelect">Size</label>
+            <select id="sizeSelect">
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="qty">Quantity</label>
+            <input id="qty" type="number" value="1" min="1" />
+          </div>
+
+          <div>
+            <label>Color</label>
+            <div class="options" id="colorOptions">
+              <div class="option active" data-color="#ffffff" data-name="White">White</div>
+              <div class="option" data-color="#111827" data-name="Black">Black</div>
+              <div class="option" data-color="#f97316" data-name="Orange">Orange</div>
+              <div class="option" data-color="#06b6d4" data-name="Teal">Teal</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 8px">Order summary</h2>
+        <div class="muted">Price updates automatically</div>
+
+        <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:13px;color:var(--muted)">Base price</div>
+            <div style="font-weight:700">₹<span id="basePrice">299</span></div>
+          </div>
+
+          <div>
+            <div style="font-size:13px;color:var(--muted)">Print cost</div>
+            <div>₹<span id="printCost">120</span></div>
+          </div>
+        </div>
+
+        <hr style="margin:16px 0;border:none;border-top:1px solid #eef2f6"/>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="muted">Quantity</div>
+          <div id="qtySummary">1</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="muted">Size</div>
+          <div id="sizeSummary">M</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div class="muted">Color</div>
+          <div id="colorSummary">White</div>
+        </div>
+
+        <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:center">
+          <div class="price">₹<span id="totalPrice">419</span> <small>incl. GST (18%)</small></div>
+        </div>
+
+        <div class="actions">
+          <button id="addToCart">Add to cart</button>
+          <button class="btn-ghost" id="printBtn">Print receipt</button>
+        </div>
+
+        <footer>
+          Tip: Use the <strong>Print receipt</strong> button to produce a printer-friendly invoice for the order.
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // pricing logic
+    const BASE_PRICE = 299; // base shirt price INR
+    const PRINT_FRONT = 120; // front print cost
+    const PRINT_BACK = 100; // back print cost
+    const GST_RATE = 0.18; // 18%
+
+    const qtyEl = document.getElementById('qty');
+    const sizeSelect = document.getElementById('sizeSelect');
+    const designText = document.getElementById('designText');
+    const printText = document.getElementById('printText');
+    const positionOptions = document.getElementById('positionOptions');
+    const colorOptions = document.getElementById('colorOptions');
+
+    const basePriceEl = document.getElementById('basePrice');
+    const printCostEl = document.getElementById('printCost');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const qtySummary = document.getElementById('qtySummary');
+    const sizeSummary = document.getElementById('sizeSummary');
+    const colorSummary = document.getElementById('colorSummary');
+    const shirt = document.getElementById('shirt');
+
+    function calcPrintCost(position){
+      if(position === 'front') return PRINT_FRONT;
+      if(position === 'back') return PRINT_BACK;
+      if(position === 'both') return PRINT_FRONT + PRINT_BACK - 20; // small discount for both
+      return 0;
+    }
+
+    function updatePrice(){
+      const qty = Math.max(1, parseInt(qtyEl.value) || 1);
+      const size = sizeSelect.value;
+      const position = document.querySelector('#positionOptions .option.active').dataset.value;
+      const colorName = document.querySelector('#colorOptions .option.active').dataset.name;
+
+      // size surcharge example
+      let sizeSurcharge = 0;
+      if(size === 'XL') sizeSurcharge = 40;
+      if(size === 'L') sizeSurcharge = 20;
+
+      const singleBase = BASE_PRICE + sizeSurcharge;
+      const singlePrint = calcPrintCost(position);
+      const subtotal = (singleBase + singlePrint) * qty;
+      const gst = Math.round(subtotal * GST_RATE);
+      const total = subtotal + gst;
+
+      basePriceEl.textContent = singleBase;
+      printCostEl.textContent = singlePrint;
+      totalPriceEl.textContent = total;
+
+      qtySummary.textContent = qty;
+      sizeSummary.textContent = size;
+      colorSummary.textContent = colorName;
+
+      // show the design text on mockup
+      const text = designText.value.trim() || 'Your Print Here';
+      printText.textContent = text;
+    }
+
+    // attach handlers
+    qtyEl.addEventListener('input', updatePrice);
+    sizeSelect.addEventListener('change', updatePrice);
+    designText.addEventListener('input', updatePrice);
+
+    // option toggles
+    document.querySelectorAll('#positionOptions .option').forEach(el=>el.addEventListener('click', e=>{
+      document.querySelectorAll('#positionOptions .option').forEach(x=>x.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      updatePrice();
+    }));
+
+    document.querySelectorAll('#colorOptions .option').forEach(el=>el.addEventListener('click', e=>{
+      document.querySelectorAll('#colorOptions .option').forEach(x=>x.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      const color = e.currentTarget.dataset.color;
+      shirt.style.background = color;
+      // adjust text color for contrast
+      if(color === '#111827') printText.style.color = '#ffffff'; else printText.style.color = '#111827';
+      updatePrice();
+    }));
+
+    document.getElementById('printBtn').addEventListener('click', ()=>{
+      // open print dialog for invoice-only (uses print CSS)
+      window.print();
+    });
+
+    document.getElementById('addToCart').addEventListener('click', ()=>{
+      alert('Added to cart — this is a demo page.');
+    });
+
+    // initial render
+    updatePrice();
+  </script>
+</body>
+</html>
