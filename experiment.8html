@@ -1,0 +1,50 @@
+// App.js
+
+import React from "react";
+
+// Student Component
+function Student(props) {
+  return (
+    <div style={{
+      border: "1px solid black",
+      padding: "10px",
+      margin: "10px",
+      width: "250px"
+    }}>
+      <h2>Student Details</h2>
+
+      <p><b>Name:</b> {props.name}</p>
+      <p><b>Course:</b> {props.course}</p>
+      <p><b>Marks:</b> {props.marks}</p>
+    </div>
+  );
+}
+
+// App Component
+function App() {
+  return (
+    <div>
+      <h1>React Components using JSX and Props</h1>
+
+      <Student
+        name="Satyam Pandey"
+        course="B.Tech CSE"
+        marks="85"
+      />
+
+      <Student
+        name="Rahul Sharma"
+        course="BCA"
+        marks="78"
+      />
+
+      <Student
+        name="Priya Singh"
+        course="MCA"
+        marks="92"
+      />
+    </div>
+  );
+}
+
+export default App;
